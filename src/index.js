@@ -5,6 +5,14 @@ import connetDB from "./db/index.js";
 
 
 connetDB()
+.then(()=>{
+    app.listen(process.env.PORT || 4000, ()=>{
+        console.log(`server is running at port ${process.env.PORT}`)
+    })
+})
+.catch((err)=>{
+    console.log('mongoDB connection failed', err)
+})
 
 
 /*
