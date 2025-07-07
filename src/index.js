@@ -1,12 +1,16 @@
 import express from "express";
-const app = express()
+// const app = express()
 import 'dotenv/config'
 import connetDB from "./db/index.js";
+import {app} from "./app.js";
+
+
+
 
 
 connetDB()
 .then(()=>{
-    app.listen(process.env.PORT || 4000, ()=>{
+    app.listen(process.env.PORT || 3000, ()=>{
         console.log(`server is running at port ${process.env.PORT}`)
     })
 })
