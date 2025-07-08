@@ -26,19 +26,25 @@ const registerUser = asyncHandler(async(req, res)=>{
     }
 
     const avatar_LocalPath = req.files?.avatar[0]?.path
-    const coverImg_LocalPath = req.files?.coverImg[0]?.path
+    // const coverImg_LocalPath = req.files?.coverImg[0]?.path
+
+    let coverImgLocalPath;
+    if(req.files && Array.isArray(req.files.coverImg)
+    && req.files.coverImg.length > 0){
+        coverImgLocalPath = req.files.coverImg[0].path
+    }
 
     if(!avatar_LocalPath){
         throw new ApiError(400,'Avatar is required')
     }
 
     const avatar = await uploadOnCloudinary(avatar_LocalPath)
-    const coverImg = await uploadOnCloudinary(coverImg_LocalPath)
+    const coverImg = await uploadOnCloudinary(coverImgLocalPath)
 
     if(!avatar){
         throw new ApiError(400,'Avatar is required')
     }
-    console.log("j")
+    
 
     const user = await User.create({
         fullname,
@@ -46,9 +52,9 @@ const registerUser = asyncHandler(async(req, res)=>{
         coverImg: coverImg?.url || "",
         email: email,
         password: password,
-        username: username
+        username: username.toLowerCase()
     })
-    console.log('h')
+
 
     const createdUser = await User.findById(user._id).select(
         "-password -refreshToken"
