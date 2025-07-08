@@ -10,8 +10,9 @@ cloudinary.config({
 
 
 const uploadOnCloudinary = async function(localFilePath){
+    console.log('uploading started')
     try {
-        if (localFilePath) return null
+        if (!localFilePath) return null
         const response = await cloudinary.uploader.upload(localFilePath, {
             resource_type: 'auto'
         })
@@ -19,7 +20,8 @@ const uploadOnCloudinary = async function(localFilePath){
         return response
 
     } catch (error) {
-        fs.unlinkSync(localFilePath) //remove the locally saved temporay file
+        fs.unlinkSync(localFilePath)
+        console.log("failed") //remove the locally saved temporay file
         return null
     }
 }

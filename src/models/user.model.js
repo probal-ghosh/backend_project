@@ -6,7 +6,7 @@ import bcrypt from "bcrypt"
 
 const userSchema =  new Schema(
     {
-        userName:{
+        username:{
             type: String,
             required: true,
             unique: true,
@@ -21,7 +21,7 @@ const userSchema =  new Schema(
             lowercase: true,
             trim: true,
         },
-        fullName:{
+        fullname:{
             type: String,
             required: true,
             trim: true,
@@ -70,8 +70,8 @@ userSchema.methods.generateAccessToken = function(){
     return jwt.sign({
         _id: this._id,
         email: this.email,
-        userName: this.userName,
-        fullName: this.fullName
+        username: this.username,
+        fullname: this.fullname
     },
     process.env.ACCESS_TOKEN_SECRET,
     {
