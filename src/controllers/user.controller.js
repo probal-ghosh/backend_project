@@ -270,6 +270,53 @@ const updateAccountDetalis = asyncHandler(async(req, res)=>{
             .json(new ApiResponse(200, user, "Account details updated successfully"))
 })
 
+const updateUserAvatar = asyncHandler(async(req, res)=>{
+    const avatarLocalPath = req.file?.path
+
+    if(!avatarLocalPath){
+        throw new ApiError(400, "Avatar is required")
+    }
+
+    const avatar = await uploadOnCloudinary(avatarLocalPath)
+
+    if(!avatar.url){
+        throw new ApiError(400, "Error while uploading avatar")
+    }
+
+    await User.findByIdAndUpdate(
+        req.user?._id,
+
+        {
+            $set: avatar.url
+        },
+        {new: true}
+    ).select("-passoword")
+
+})
+
+const updateUserCoverImg = asyncHandler(async(req, res)=>{
+    const coverImgLocalPath = req.file?.path
+
+    if(!coverImgLocalPath){
+        throw new ApiError(400, "Avatar is required")
+    }
+
+    const coverImg = await uploadOnCloudinary(coverImgLocalPath)
+
+    if(!coverImg.url){
+        throw new ApiError(400, "Error while uploading cover Img")
+    }
+
+    await User.findByIdAndUpdate(
+        req.user?._id,
+
+        {
+            $set: coverImg.url
+        },
+        {new: true}
+    ).select("-passoword")
+
+})
 
 
 export  {registerUser, 
@@ -278,5 +325,7 @@ export  {registerUser,
     refreshAccessToken,
     changePassword,
     getCurrentUser,
-    updateAccountDetalis
+    updateAccountDetalis,
+    updateUserAvatar,
+    updateUserCoverImg
 }
